@@ -34,7 +34,7 @@ function preload(){
 	this.load.image('etoile','assets/piece.png');
 	this.load.image('sol','assets/platform.png');
 	this.load.image('bomb','assets/bombe.png');
-	this.load.spritesheet('perso','assets/Edwig.png',{frameWidth: 32, frameHeight: 50});
+	this.load.spritesheet('perso','assets/dinojj.png',{frameWidth: 50, frameHeight: 70});
 }
 
 
@@ -57,14 +57,14 @@ function create(){
 	
 	this.anims.create({
 		key:'left',
-		frames: this.anims.generateFrameNumbers('perso', {start: 0, end: 3}),
+		frames: this.anims.generateFrameNumbers('perso', {start: 0, end: 2}),
 		frameRate: 10,
 		repeat: -1
 	});
 	
 	this.anims.create({
 		key:'stop',
-		frames: [{key: 'perso', frame:4}],
+		frames: [{key: 'perso', frame:0}],
 		frameRate: 20
 	});
 	
@@ -77,7 +77,7 @@ function create(){
 	this.physics.add.collider(stars,platforms);
 	this.physics.add.overlap(player,stars,collectStar,null,this);
 
-	scoreText = this.add.text(16,16, 'score: 0', {fontSize: '32px', fill:'#000'});
+	scoreText = this.add.text(16,16, 'Score: 0', {fontSize: '32px', fill:'#FFF'});
 	bombs = this.physics.add.group();
 	this.physics.add.collider(bombs,platforms);
 	this.physics.add.collider(player,bombs, hitBomb, null, this);
@@ -87,13 +87,13 @@ function create(){
 
 function update(){
 	if(cursors.left.isDown){
-		player.anims.play('left', true);
+		player.anims.play('right', true);
 		player.setVelocityX(-300);
-		player.setFlipX(false);
+		player.setFlipX(true);
 	}else if(cursors.right.isDown){
 		player.setVelocityX(300);
-		player.anims.play('left', true);
-		player.setFlipX(true);
+		player.anims.play('right', true);
+		player.setFlipX(false);
 	}else{
 		player.anims.play('stop', true);
 		player.setVelocityX(0);
@@ -102,7 +102,13 @@ function update(){
 	if(cursors.up.isDown && player.body.touching.down){
 		player.setVelocityY(-330);
 	} 
-	
+		if(cursors.down.isDown && cursors.right.isDown){
+		player.setVelocityX(800);
+	} 
+	else if(cursors.down.isDown && cursors.left.isDown){
+		player.setVelocityX(-800);
+
+	}
 }
 function hitBomb(player, bomb){
 	this.physics.pause();
